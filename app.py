@@ -35,9 +35,9 @@ if api_key and uploaded_file is not None:
                 # رفع الملف السحابي لضمان معالجة المحاضرة كاملة دون انقطاع
                 audio_file = genai.upload_file(path="temp_audio.mp3")
                 
-                # تم التعديل إلى gemini-1.5-flash لتجاوز خطأ الحصة اليومية (Quota) وضمان تفريغ المحاضرة كاملة مجاناً
+                # --- التحديث الجذري هنا: استخدام gemini-2.5-flash لحل الـ 404 والـ Quota معاً ---
                 model = genai.GenerativeModel(
-                    model_name="gemini-1.5-flash",
+                    model_name="gemini-2.5-flash",
                     system_instruction=(
                         "You are an elite academic engine specialized in Chemical Engineering and Plant Design. "
                         "Process the entire audio file completely from start to finish without missing or cutting any section. "
