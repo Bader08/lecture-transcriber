@@ -15,7 +15,8 @@ col_input, col_output = st.columns([1, 2])
 
 with col_input:
     st.subheader("📁 1. Source Audio File")
-    uploaded_file = st.file_uploader("Upload Lecture Audio (MP3 / WAV)", type=["mp3", "wav"])
+    # تم تحديث السطر التالي ليشمل صيغة m4a وصيغ الجوالات الأخرى لتقبل رفع أي محاضرة فوراً
+    uploaded_file = st.file_uploader("Upload Lecture Audio (M4A / MP3 / WAV / OGG / AAC)", type=["m4a", "mp3", "wav", "ogg", "aac"])
     
     st.markdown("---")
     st.info("💡 هذا البرنامج يعمل الآن بشكل مستقل تماماً داخل منصة Streamlit دون الحاجة لأي اتصالات أو API Keys خارجية.")
@@ -26,9 +27,7 @@ if uploaded_file is not None:
     if col_input.button("🚀 Start Processing", use_container_width=True):
         with st.spinner("Processing your audio file independently... Please wait."):
             try:
-                # هنا يتم تشغيل سكريبت تجريبي يحاكي التفريغ الكامل للمحاضرة بناءً على اسم الملف المرفوع
-                # لتجربة الواجهة وأزرار التحميل بشكل كامل ومستقل
-                
+                # محاكاة التفريغ الكامل للمحاضرة بناءً على اسم الملف المرفوع لتجربة الواجهة
                 fake_transcript = (
                     f"[00:01:15] Speaker 1 (Professor): Welcome class. Today we are focusing on the full dynamic scaling of our Plant Design specifications.\n"
                     f"[00:10:45] Speaker 1 (Professor): Please make sure to review the core formulas for distillation columns, piping setups, and fluid reactors.\n"
