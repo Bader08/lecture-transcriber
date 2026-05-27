@@ -15,7 +15,6 @@ col_input, col_output = st.columns([1, 2])
 
 with col_input:
     st.subheader("📁 1. Source Audio File")
-    # تم تحديث السطر التالي ليشمل صيغة m4a وصيغ الجوالات الأخرى لتقبل رفع أي محاضرة فوراً
     uploaded_file = st.file_uploader("Upload Lecture Audio (M4A / MP3 / WAV / OGG / AAC)", type=["m4a", "mp3", "wav", "ogg", "aac"])
     
     st.markdown("---")
@@ -56,13 +55,16 @@ if uploaded_file is not None:
                         c1, c2, c3 = st.columns(3)
                         c1.download_button("Plain Text (.txt)", data=fake_transcript, file_name=f"Transcript_{audio_file_name}.txt", mime="text/plain", use_container_width=True)
                         
+                        # --- الإصلاح المعتمد للـ PDF للسكريبت ---
                         pdf1 = FPDF()
                         pdf1.add_page()
                         pdf1.set_font("Arial", size=12)
-                        pdf1.multi_cell(0, 10, txt=fake_transcript.encode('latin-1', 'ignore').decode('latin-1'))
-                        buf1 = io.BytesIO()
-                        pdf1.output(buf1, 'F')
-                        c2.download_button("PDF Document (.pdf)", data=buf1.getvalue(), file_name=f"Transcript_{audio_file_name}.pdf", mime="application/pdf", use_container_width=True)
+                        clean_text1 = fake_transcript.encode('latin-1', 'ignore').decode('latin-1')
+                        pdf1.multi_cell(0, 10, txt=clean_text1)
+                        # الحل: تحويل مخرجات الـ PDF إلى نص بايتس مباشرة دون استخدام ملف أو مسار خارجي
+                        pdf1_bytes = pdf1.output(dest='S').encode('latin-1')
+                        
+                        c2.download_button("PDF Document (.pdf)", data=pdf1_bytes, file_name=f"Transcript_{audio_file_name}.pdf", mime="application/pdf", use_container_width=True)
                         c3.download_button("Subtitle File (.srt)", data=fake_transcript, file_name=f"Transcript_{audio_file_name}.srt", mime="text/srt", use_container_width=True)
 
                     with tab2:
@@ -72,13 +74,15 @@ if uploaded_file is not None:
                         cc1, cc2 = st.columns(2)
                         cc1.download_button("Plain Text (.txt)", data=fake_summary, file_name=f"Study_Targets_{audio_file_name}.txt", mime="text/plain", use_container_width=True)
                         
+                        # --- الإصلاح المعتمد للـ PDF للملخص ---
                         pdf2 = FPDF()
                         pdf2.add_page()
                         pdf2.set_font("Arial", size=12)
-                        pdf2.multi_cell(0, 10, txt=fake_summary.encode('latin-1', 'ignore').decode('latin-1'))
-                        buf2 = io.BytesIO()
-                        pdf2.output(buf2, 'F')
-                        cc2.download_button("PDF Document (.pdf)", data=buf2.getvalue(), file_name=f"Study_Targets_{audio_file_name}.pdf", mime="application/pdf", use_container_width=True)
+                        clean_text2 = fake_summary.encode('latin-1', 'ignore').decode('latin-1')
+                        pdf2.multi_cell(0, 10, txt=clean_text2)
+                        pdf2_bytes = pdf2.output(dest='S').encode('latin-1')
+                        
+                        cc2.download_button("PDF Document (.pdf)", data=pdf2_bytes, file_name=f"Study_Targets_{audio_file_name}.pdf", mime="application/pdf", use_container_width=True)
 
             except Exception as e:
                 st.error(f"Error: {e}")
